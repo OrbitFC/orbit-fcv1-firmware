@@ -31,7 +31,8 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stm32h747xx.h>
+#include <stm32h7xx.h>
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -57,6 +58,54 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define BNO055_INT_Pin GPIO_PIN_0
+#define BNO055_INT_GPIO_Port GPIOF
+#define ICM42688_INT1_Pin GPIO_PIN_2
+#define ICM42688_INT1_GPIO_Port GPIOF
+#define ICM42688_INT2_Pin GPIO_PIN_3
+#define ICM42688_INT2_GPIO_Port GPIOF
+#define SPI1_NSS3_Pin GPIO_PIN_4
+#define SPI1_NSS3_GPIO_Port GPIOF
+#define SPI1_NSS4_Pin GPIO_PIN_5
+#define SPI1_NSS4_GPIO_Port GPIOF
+#define SPI1_NSS1_Pin GPIO_PIN_4
+#define SPI1_NSS1_GPIO_Port GPIOC
+#define SPI1_NSS2_Pin GPIO_PIN_5
+#define SPI1_NSS2_GPIO_Port GPIOC
+#define BATV_Pin GPIO_PIN_12
+#define BATV_GPIO_Port GPIOF
+#define SPI2_NSS1_Pin GPIO_PIN_7
+#define SPI2_NSS1_GPIO_Port GPIOE
+#define SPI2_NSS2_Pin GPIO_PIN_8
+#define SPI2_NSS2_GPIO_Port GPIOE
+#define RADIO_IO1_Pin GPIO_PIN_9
+#define RADIO_IO1_GPIO_Port GPIOE
+#define RADIO_IO2_Pin GPIO_PIN_10
+#define RADIO_IO2_GPIO_Port GPIOE
+#define RADIO_IO3_Pin GPIO_PIN_11
+#define RADIO_IO3_GPIO_Port GPIOE
+#define RADIO_IO4_Pin GPIO_PIN_12
+#define RADIO_IO4_GPIO_Port GPIOE
+#define RADIO_IO5_Pin GPIO_PIN_13
+#define RADIO_IO5_GPIO_Port GPIOE
+#define RADIO_IO6_Pin GPIO_PIN_14
+#define RADIO_IO6_GPIO_Port GPIOE
+#define LSM303_INTMAG_Pin GPIO_PIN_8
+#define LSM303_INTMAG_GPIO_Port GPIOD
+#define LSM303_INTXL_Pin GPIO_PIN_9
+#define LSM303_INTXL_GPIO_Port GPIOD
+#define LSM303_DRDYMAG_Pin GPIO_PIN_10
+#define LSM303_DRDYMAG_GPIO_Port GPIOD
+#define BMI088_INT1_Pin GPIO_PIN_4
+#define BMI088_INT1_GPIO_Port GPIOD
+#define BMI088_INT2_Pin GPIO_PIN_5
+#define BMI088_INT2_GPIO_Port GPIOD
+#define BMI08888_INT3_Pin GPIO_PIN_6
+#define BMI08888_INT3_GPIO_Port GPIOD
+#define BMI088_INT4_Pin GPIO_PIN_7
+#define BMI088_INT4_GPIO_Port GPIOD
+#define BMP585_INT_Pin GPIO_PIN_1
+#define BMP585_INT_GPIO_Port GPIOE
 
 /* USER CODE BEGIN Private defines */
 

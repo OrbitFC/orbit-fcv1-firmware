@@ -25,6 +25,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     ./Core/Src/main.c
     ./Core/Src/gpio.c
+    ./Core/Src/adc.c
     ./Core/Src/fdcan.c
     ./Core/Src/freertos.c
     ./Core/Src/i2c.c
@@ -52,6 +53,8 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c.c
     ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_i2c_ex.c
     ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c
+    ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c
+    ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c
     ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c
     ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c
     ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c

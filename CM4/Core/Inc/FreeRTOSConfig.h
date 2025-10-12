@@ -164,6 +164,14 @@ standard names. */
 
 /* USER CODE BEGIN Defines */
 /* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
+#ifdef configENABLE_FPU
+  #undef configENABLE_FPU
+  #define configENABLE_FPU                         1
+#endif
+#ifdef configENABLE_MPU
+  #undef configENABLE_MPU
+  #define configENABLE_MPU                         1
+#endif
 /* USER CODE END Defines */
 
 #endif /* FREERTOS_CONFIG_H */

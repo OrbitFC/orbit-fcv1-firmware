@@ -2,3 +2,6 @@
 CMakeCache.txt
 .vscode
 CMakeFiles
+CM4/build
+CM7/build
+build
