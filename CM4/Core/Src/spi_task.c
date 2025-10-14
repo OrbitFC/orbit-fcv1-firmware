@@ -28,26 +28,28 @@ void spiTask(void *_param)
                     goto BREAK;
                 }
                     
-                if (req->channel > no_channel_hspi[req->inst]) {
-                    *(req->status) |= SPI_STATUS_BYTE0_INVALID_CHANNEL;
-                    xSemaphoreGive(req->semphr);
-                    goto BREAK;
-                }
+            if (req->channel > no_channel_hspi[req->inst]) {
+                *(req->status) |= SPI_STATUS_BYTE0_INVALID_CHANNEL;
+                xSemaphoreGive(req->semphr);
+                goto BREAK;
+            }
 
-                if (req->inst == SPI_INSTANCE_SPI1)
-                    req_spi1 = req;
-                else if (req->inst == SPI_INSTANCE_SPI2)
-                    req_spi2 = req;
+            if (req->inst == SPI_INSTANCE_SPI1)
+                req_spi1 = req;
+            else if (req->inst == SPI_INSTANCE_SPI2)
+                req_spi2 = req;
 
-                HAL_GPIO_WritePin(port[req->inst][req->channel], pin[req->inst][req->channel], GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(port[req->inst][req->channel], pin[req->inst][req->channel], GPIO_PIN_RESET);
 
             switch (req->type) {
                 case SPI_REQUEST_FINISH_SPI1:
                     HAL_GPIO_WritePin(port[req_spi1->inst][req_spi1->channel], pin[req_spi1->inst][req_spi1->channel], GPIO_PIN_SET);
                     xSemaphoreGive(req_spi1->semphr);
+                    break;
                 case SPI_REQUEST_FINISH_SPI2:
                     HAL_GPIO_WritePin(port[req_spi2->inst][req_spi2->channel], pin[req_spi2->inst][req_spi2->channel], GPIO_PIN_SET);
                     xSemaphoreGive(req_spi2->semphr);
+                    break;
                 case SPI_REQUEST_TRANSMIT:
                     stat = HAL_SPI_Transmit_DMA(h_spi[req->inst], req->tx, req->size);
                     break;

@@ -25,7 +25,11 @@ enum UART_REQUEST {
 
 enum I2C_REQUEST {
     I2C_REQUEST_READ,
-    I2C_REQUEST_WRITE
+    I2C_REQUEST_WRITE,
+    I2C_REQUEST_FINISH_I2C1,
+    I2C_REQUEST_FINISH_I2C2,
+    I2C_REQUEST_FINISH_I2C3,
+    I2C_REQUEST_FINISH_I2C4
 };
 
 enum CAN_REQUEST {
@@ -58,7 +62,14 @@ enum UART_INSTANCE {
 enum SPI_STATUS_BYTE0 {
     SPI_STATUS_BYTE0_OK,
     SPI_STATUS_BYTE0_INVALID_INSTANCE,
-    SPI_STATUS_BYTE0_INVALID_CHANNEL
+    SPI_STATUS_BYTE0_INVALID_CHANNEL,
+    SPI_STATUS_BYTE0_FAILED
+};
+
+enum I2C_STATUS_BYTE0 {
+    I2C_STATUS_BYTE0_OK,
+    I2C_STATUS_BYTE0_INVALID_INSTANCE,
+    I2C_STATUS_BYTE0_FAILED
 };
 
 
@@ -92,8 +103,8 @@ struct i2cRequest {
     uint8_t *tx;
     uint8_t *rx;
     size_t size;
-    uint8_t dev_addr;   // 10-bit address is now unsupported
-    uint8_t mem_addr;
+    uint16_t dev_addr;   // 17-bit address is now unsupported
+    uint16_t mem_addr;
     enum UART_INSTANCE inst;
     SemaphoreHandle_t semphr;
     unsigned *status;
