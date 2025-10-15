@@ -5,4 +5,5 @@
 #include <semphr.h>
 
 extern SemaphoreHandle_t spiHwSemphr;
+extern SemaphoreHandle_t sensorI2cSemphr;
 #endif

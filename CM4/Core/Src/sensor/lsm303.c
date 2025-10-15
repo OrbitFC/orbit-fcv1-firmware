@@ -1,24 +1,27 @@
 #include <sensor/lsm303.h>
+#include "task_queue.h"
+#include "task_semphr.h"
 
-HAL_StatusTypeDef _lsm303_write_singular(struct lsm303 *hlsm, uint8_t reg, uint8_t data)
+static struct i2cRequest req;
+
+#define LSM303_INSTANCE I2C_INSTANCE_I2C2
+
+HAL_StatusTypeDef __lsm303_axwrite_single(uint8_t reg, uint8_t data)
 {
-    return HAL_I2C_Mem_Write_DMA(hlsm->hi2c, hlsm->addr, SUB_SING(reg), 
-    I2C_MEMADD_SIZE_8BIT, &data, 1);
 }
 
-HAL_StatusTypeDef _lsm303_read_singular(struct lsm303 *hlsm, uint8_t reg, uint8_t *pdata)
+HAL_StatusTypeDef _lsm303_axread_single(uint8_t reg, uint8_t *pdata)
 {
-    return HAL_I2C_Mem_Read_DMA(hlsm->hi2c, hlsm->addr, SUB_SING(reg),
-    I2C_MEMADD_SIZE_8BIT, pdata, 1);
+    
 }
 
-HAL_StatusTypeDef _lsm303_write_mult(struct lsm303 *hlsm, uint8_t reg, size_t len, uint8_t *pdata)
+HAL_StatusTypeDef _lsm303_axwrite(uint8_t reg, size_t len, uint8_t *pdata)
 {
     return HAL_I2C_Mem_Write_DMA(hlsm->hi2c, hlsm->addr, SUB_CONT(reg),
     I2C_MEMADD_SIZE_8BIT, pdata, len);
 }
 
-HAL_StatusTypeDef _lsm303_read_mult(struct lsm303 *hlsm, uint8_t reg, size_t len, uint8_t *pdata)
+HAL_StatusTypeDef _lsm303_axread(uint8_t reg, size_t len, uint8_t *pdata)
 {
     return HAL_I2C_Mem_Read_DMA(hlsm->hi2c, hlsm->addr, SUB_CONT(reg),
     I2C_MEMADD_SIZE_8BIT, pdata, len);
