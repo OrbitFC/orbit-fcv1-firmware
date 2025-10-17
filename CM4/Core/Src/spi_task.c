@@ -3,6 +3,7 @@
 #include "task_func.h"
 #include "task_queue.h"
 #include "task_semphr.h"
+#include "debug.h"
 
 #define NO_SPI 2
 
@@ -23,13 +24,13 @@ void spiTask(void *_param)
         BaseType_t ret = xQueueReceive(spiQueue, &req, portMAX_DELAY);
         if (ret == pdPASS) {
             if (req->inst >= NO_SPI) {
-                    *(req->status) |= SPI_STATUS_BYTE0_INVALID_INSTANCE;
+                    *(req->status) |= STATUS_INVALID_INSTANCE;
                     xSemaphoreGive(req->semphr);
                     goto BREAK;
                 }
                     
             if (req->channel > no_channel_hspi[req->inst]) {
-                *(req->status) |= SPI_STATUS_BYTE0_INVALID_CHANNEL;
+                *(req->status) |= STATUS_INVALID_CHANNEL;
                 xSemaphoreGive(req->semphr);
                 goto BREAK;
             }
@@ -44,10 +45,12 @@ void spiTask(void *_param)
             switch (req->type) {
                 case SPI_REQUEST_FINISH_SPI1:
                     HAL_GPIO_WritePin(port[req_spi1->inst][req_spi1->channel], pin[req_spi1->inst][req_spi1->channel], GPIO_PIN_SET);
+                    *(req->status) = STATUS_OK;
                     xSemaphoreGive(req_spi1->semphr);
                     break;
                 case SPI_REQUEST_FINISH_SPI2:
                     HAL_GPIO_WritePin(port[req_spi2->inst][req_spi2->channel], pin[req_spi2->inst][req_spi2->channel], GPIO_PIN_SET);
+                    *(req->status) = STATUS_OK;
                     xSemaphoreGive(req_spi2->semphr);
                     break;
                 case SPI_REQUEST_TRANSMIT:
