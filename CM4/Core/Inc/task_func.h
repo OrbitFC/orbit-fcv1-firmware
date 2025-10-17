@@ -8,10 +8,12 @@ void uartTask(void*);
 void spiTask(void*);
 void canTask(void*);
 void i2cTask(void*);
+void sensorTask(void*);
 
 extern TaskHandle_t uartTaskHandle;
 extern TaskHandle_t spiTaskHandle;
 extern TaskHandle_t canTaskHandle;
 extern TaskHandle_t i2cTaskHandle;
+extern TaskHandle_t sensorTaskHandle;
 
 #endif
