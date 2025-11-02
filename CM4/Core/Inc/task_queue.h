@@ -92,7 +92,7 @@ struct i2cRequest {
     uint16_t mem_addr;
     enum I2C_INSTANCE inst;
     SemaphoreHandle_t semphr;
-    unsigned *status;
+    unsigned status;
 };
 
 typedef struct i2cRequest* i2cRequestTypeDef;
