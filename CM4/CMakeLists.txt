@@ -66,7 +66,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     ./Core/Src/i2c_task.c
     ./Core/Src/sensor_task.c
     ./Core/Src/spi_task.c
-    ./Core/src/uart_task.c
+    ./Core/Src/uart_task.c
 )
 
 # Link directories setup
