@@ -27,6 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include "task_func.h"
 #include "task_queue.h"
+#include "sensor.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -162,6 +163,10 @@ void MX_FREERTOS_Init(void) {
     canQueue = xQueueCreate(QUEUE_CAN_SIZE, sizeof(canRequestTypeDef));
     if (canQueue == NULL)
         Error_Handler();
+    sensorQueue = xQueueCreate(QUEUE_SENSOR_SIZE, sizeof(sensorRequestTypeDef));
+    if (sensorQueue == NULL)
+        Error_Handler();
+
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
