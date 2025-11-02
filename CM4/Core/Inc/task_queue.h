@@ -90,7 +90,7 @@ struct i2cRequest {
     size_t size;
     uint16_t dev_addr;   // 17-bit address is now unsupported
     uint16_t mem_addr;
-    enum UART_INSTANCE inst;
+    enum I2C_INSTANCE inst;
     SemaphoreHandle_t semphr;
     unsigned *status;
 };
