@@ -1,6 +1,7 @@
 #ifndef __SENSOR_H__
 #define __SENSOR_H__
 
+#include "task_queue.h"
 #include <stdint.h>
 #include <FreeRTOS.h>
 #include <queue.h>
@@ -64,4 +65,7 @@ extern QueueHandle_t sensorQueue;
 
 typedef struct sensorRequest* sensorRequestTypeDef;
 
+// Generic sensor I2C read/write. All sensor must call these functions
+unsigned __sensor_i2c_read(uint8_t *rx, size_t size, uint16_t dev_addr, uint16_t mem_addr, enum I2C_INSTANCE inst);
+unsigned __sensor_i2c_write(uint8_t *tx, size_t size, uint16_t dev_addr, uint16_t mem_addr, enum I2C_INSTANCE inst);
 #endif
