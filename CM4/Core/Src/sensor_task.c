@@ -2,6 +2,7 @@
 #include "task_func.h"
 #include "task.h"
 #include "task_queue.h"
+#include "task_semphr.h"
 
 struct sensorInfo sensorList[NO_SENSOR];
 QueueHandle_t sensorQueue;
@@ -49,8 +50,35 @@ SENSOR_FAIL_0:
         }
     }
 
-    
-    
+}
 
+unsigned __sensor_i2c_read(uint8_t *rx, size_t size, uint16_t dev_addr, uint16_t mem_addr, enum I2C_INSTANCE inst)
+{
+    struct i2cRequest req;
+    req.type = I2C_REQUEST_READ;
+    req.rx = rx;
+    req.size = size;
+    req.dev_addr = dev_addr;
+    req.mem_addr = mem_addr;
+    req.inst = inst;
+    req.semphr = sensorI2cSemphr;
+    xQueueSendToBack(i2cQueue, &req, portMAX_DELAY);
+    xSemaphoreTake(sensorI2cSemphr, portMAX_DELAY);
+    return req.status;
+}
 
+unsigned __sensor_i2c_write(uint8_t *tx, size_t size, uint16_t dev_addr, uint16_t mem_addr, enum I2C_INSTANCE inst)
+{
+    struct i2cRequest req;
+    req.type = I2C_REQUEST_WRITE;
+    req.rx = tx;
+    req.size = size;
+    req.dev_addr = dev_addr;
+    req.mem_addr = mem_addr;
+    req.inst = inst;
+    req.semphr = sensorI2cSemphr;
+    xQueueSendToBack(i2cQueue, &req, portMAX_DELAY);
+    xSemaphoreTake(sensorI2cSemphr, portMAX_DELAY);
+    
+    return req.status;
 }
