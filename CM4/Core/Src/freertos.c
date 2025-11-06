@@ -28,6 +28,7 @@
 #include "task_func.h"
 #include "task_queue.h"
 #include "sensor.h"
+#include "task_semphr.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -140,6 +141,12 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
+    crcMutex = xSemaphoreCreateMutex();
+    if (crcMutex == NULL)
+        Error_Handler();
+    rngMutex = xSemaphoreCreateMutex();
+    if (rngMutex == NULL)
+        Error_Handler();
   /* USER CODE END RTOS_MUTEX */
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */

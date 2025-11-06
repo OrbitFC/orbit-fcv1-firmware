@@ -60,6 +60,8 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define BNO055_INT_Pin GPIO_PIN_0
 #define BNO055_INT_GPIO_Port GPIOF
+#define BNO055_RESET_Pin GPIO_PIN_1
+#define BNO055_RESET_GPIO_Port GPIOF
 #define ICM42688_INT1_Pin GPIO_PIN_2
 #define ICM42688_INT1_GPIO_Port GPIOF
 #define ICM42688_INT2_Pin GPIO_PIN_3
@@ -96,6 +98,10 @@ void Error_Handler(void);
 #define LSM303_INTXL_GPIO_Port GPIOD
 #define LSM303_DRDYMAG_Pin GPIO_PIN_10
 #define LSM303_DRDYMAG_GPIO_Port GPIOD
+#define LED_BLUE_Pin GPIO_PIN_4
+#define LED_BLUE_GPIO_Port GPIOG
+#define LED_GREEN_Pin GPIO_PIN_5
+#define LED_GREEN_GPIO_Port GPIOG
 #define BMI088_INT1_Pin GPIO_PIN_4
 #define BMI088_INT1_GPIO_Port GPIOD
 #define BMI088_INT2_Pin GPIO_PIN_5
