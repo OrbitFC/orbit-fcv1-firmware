@@ -5,3 +5,8 @@ CMakeFiles
 CM4/build
 CM7/build
 build
+.clangd
+.settings
+CM4/.cache
+CM4/.settings
+CM7/.settings

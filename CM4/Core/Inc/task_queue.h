@@ -58,21 +58,6 @@ enum UART_INSTANCE {
     UART_INSTANCE_UART7
 };
 
-// Status code
-enum SPI_STATUS_BYTE0 {
-    SPI_STATUS_BYTE0_OK,
-    SPI_STATUS_BYTE0_INVALID_INSTANCE,
-    SPI_STATUS_BYTE0_INVALID_CHANNEL,
-    SPI_STATUS_BYTE0_FAILED
-};
-
-enum I2C_STATUS_BYTE0 {
-    I2C_STATUS_BYTE0_OK,
-    I2C_STATUS_BYTE0_INVALID_INSTANCE,
-    I2C_STATUS_BYTE0_FAILED
-};
-
-
 struct spiRequest {
     enum SPI_REQUEST type;
     uint8_t *tx;
@@ -105,9 +90,9 @@ struct i2cRequest {
     size_t size;
     uint16_t dev_addr;   // 17-bit address is now unsupported
     uint16_t mem_addr;
-    enum UART_INSTANCE inst;
+    enum I2C_INSTANCE inst;
     SemaphoreHandle_t semphr;
-    unsigned *status;
+    unsigned status;
 };
 
 typedef struct i2cRequest* i2cRequestTypeDef;

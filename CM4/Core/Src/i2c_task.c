@@ -3,6 +3,7 @@
 #include "task_func.h"
 #include "task_queue.h"
 #include "task_semphr.h"
+#include "debug.h"
 
 #define NO_I2C 4
 
@@ -19,7 +20,7 @@ void i2cTask(void *_param)
         BaseType_t ret = xQueueReceive(i2cQueue, &req, portMAX_DELAY);
         if (ret == pdPASS) {
             if (req->inst >= NO_I2C) {
-                *(req->status = I2C_STATUS_BYTE0_INVALID_INSTANCE);
+                req->status = STATUS_INVALID_INSTANCE;
                 xSemaphoreGive(req->semphr);
                 goto BREAK;
             }
@@ -34,21 +35,27 @@ void i2cTask(void *_param)
                     HAL_I2C_Mem_Write_DMA(h_i2c[req->inst], req->dev_addr, req->mem_addr, I2C_MEMADD_SIZE_8BIT, req->tx, req->size);
                     break;
                 case I2C_REQUEST_FINISH_I2C1:
+                    req->status = STATUS_OK;
                     xSemaphoreGive(reqt[0]->semphr);
                     break;
                 case I2C_REQUEST_FINISH_I2C2:
+                    req->status = STATUS_OK;
                     xSemaphoreGive(reqt[1]->semphr);
                     break;
                 case I2C_REQUEST_FINISH_I2C3:
+                    req->status = STATUS_OK;
                     xSemaphoreGive(reqt[2]->semphr);
                     break;
                 case I2C_REQUEST_FINISH_I2C4:
+                    req->status = STATUS_OK;
                     xSemaphoreGive(reqt[3]->semphr);
                     break;
             }
 
 
 BREAK:
+            do {
+            } while (0);
         }
     }
 }
