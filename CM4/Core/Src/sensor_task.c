@@ -1,4 +1,4 @@
-#include "sensor.h"
+ #include "sensor.h"
 #include "task_func.h"
 #include "task.h"
 #include "task_queue.h"
@@ -19,14 +19,22 @@ uint32_t calibrateAll()
 void sensorTask(void *_param)
 {
     uint32_t _t;
+    uint8_t finished_sensor_type = 0;
     for (int i = 0; i < NO_SENSOR; i++) {
         if (sensorList[i].device_id != 0) {
             if (sensorList[i].sensor_scan()) {
                 sensorList[i].status |= 1 << STATUS_UP;
+                if (sensorList[i].sensor_type & (~(finished_sensor_type))) {
+                    // If this sensor fullfil an un-fullfilled type of sensor
+                    finished_sensor_type |= sensorList[i].sensor_type;
+                    sensorList[i].status |= 1 << STATUS_ACTIVE;
+                } else {
+                    sensorList[i].status &= ~(1 << STATUS_ACTIVE);
+                }
             } else
                 goto SENSOR_FAIL_0;
-            
-            _t = sensorList[i].sensor_config();
+            if (sensorList[i].status & (1 << STATUS_ACTIVE))
+                _t = sensorList[i].sensor_config();
             if (!_t)
                 goto SENSOR_FAIL_0;
         
@@ -34,8 +42,6 @@ void sensorTask(void *_param)
 
 SENSOR_FAIL_0:
             sensorList[i].status &= ~(1 << STATUS_UP);
-            
-
         }
     }
 
