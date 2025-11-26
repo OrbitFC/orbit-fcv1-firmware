@@ -1,12 +1,41 @@
 #ifndef __BNO055_H__
 #define __BNO055_H__
 
-#include "sensor.h"
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include "i2c.h"
 
-#define BNO055_SENSOR_ID 0xA0
+//Address of I2C slave 0x28
+#define BNO055_I2C_ADDR_HI 0x29
+#define BNO055_I2C_ADDR_LO 0x28
+#define BNO055_I2C_ADDR    BNO055_I2C_ADDR_LO
 
-// Page 0
-#define BNO055_ID (0xA0)
+//Reserve for future function
+/*
+#define BNO055_READ_TIMEOUT 100
+#define BNO055_WRITE_TIMEOUT 10
+
+#define ERROR_WRITE_SUCCESS 0x01  // Everything working as expected
+#define ERROR_WRITE_FAIL                                                       \
+  0x03  // Check connection, protocol settings and operation more of BNO055
+#define ERROR_REGMAP_INV_ADDR 0x04   // Invalid register address
+#define ERROR_REGMAP_WRITE_DIS 0x05  // Register is read-only
+#define ERROR_WRONG_START_BYTE 0x06  // Check if the first byte
+#define ERROR_BUS_OVERRUN_ERR                                                  \
+  0x07  // Resend the command, BNO055 was not able to clear the receive buffer
+#define ERROR_MAX_LEN_ERR                                                      \
+  0x08  // Split the command, max fire size can be up to 128 bytes
+#define ERROR_MIN_LEN_ERR 0x09  // Min length of data is less than 1
+#define ERROR_RECV_CHAR_TIMEOUT                                                \
+  0x0A  // Decrease the waiting time between sending of two bytes of one frame
+
+#define REG_WRITE 0x00
+#define REG_READ 0x01
+*/
+
+//---------------------Page 0---------------------
+#define BNO055_ID 0xA0
 #define BNO055_CHIP_ID 0x00        // value: 0xA0
 #define BNO055_ACC_ID 0x01         // value: 0xFB
 #define BNO055_MAG_ID 0x02         // value: 0x32
@@ -95,8 +124,8 @@
 #define BNO055_ACC_RADIUS_MSB 0x68
 #define BNO055_MAG_RADIUS_LSB 0x69
 #define BNO055_MAG_RADIUS_MSB 0x6A
-//
-// BNO055 Page 1
+
+//---------------------Page 1---------------------
 #define BNO055_PAGE_ID 0x07
 #define BNO055_ACC_CONFIG 0x08
 #define BNO055_MAG_CONFIG 0x09
@@ -122,66 +151,121 @@
 #define BNO055_GYR_AM_THRESH 0x1E
 #define BNO055_GYR_AM_SET 0x1F
 
-
-#define START_BYTE 0xAA
-#define RESPONSE_BYTE 0xBB
-#define ERROR_BYTE 0xEE
-
-#define BNO055_I2C_ADDR_HI 0x29
-#define BNO055_I2C_ADDR_LO 0x28
-#define BNO055_I2C_ADDR    BNO055_I2C_ADDR_LO
-
-#define BNO055_READ_TIMEOUT 100
-#define BNO055_WRITE_TIMEOUT 10
-
-#define ERROR_WRITE_SUCCESS 0x01  // Everything working as expected
-#define ERROR_WRITE_FAIL                                                       \
-  0x03  // Check connection, protocol settings and operation more of BNO055
-#define ERROR_REGMAP_INV_ADDR 0x04   // Invalid register address
-#define ERROR_REGMAP_WRITE_DIS 0x05  // Register is read-only
-#define ERROR_WRONG_START_BYTE 0x06  // Check if the first byte
-#define ERROR_BUS_OVERRUN_ERR                                                  \
-  0x07  // Resend the command, BNO055 was not able to clear the receive buffer
-#define ERROR_MAX_LEN_ERR                                                      \
-  0x08  // Split the command, max fire size can be up to 128 bytes
-#define ERROR_MIN_LEN_ERR 0x09  // Min length of data is less than 1
-#define ERROR_RECV_CHAR_TIMEOUT                                                \
-  0x0A  // Decrease the waiting time between sending of two bytes of one frame
-
-#define REG_WRITE 0x00
-#define REG_READ 0x01
-
-#define BNO055_INSTANCE I2C_INSTANCE_I2C1
-
-enum BNO055_STATUS {
-    BNO055_STATUS_IDLE = 0x00,
-    BNO055_STATUS_SYSTEM_ERROR = 0x01,
-    BNO055_STATUS_INITIALIZING_PERIPHERALS = 0x02,
-    BNO055_STATUS_SYSTEM_INITIALIZATION = 0x03,
-    BNO055_STATUS_EXECUTING_SELF_TEST = 0x04,
-    BNO055_STATUS_FUSION_ALGO_RUNNING = 0x05,
-    BNO055_STATUS_FUSION_ALOG_NOT_RUNNING = 0x06
-};
-
-enum BNO055_OPMODE {
-    BNO055_OPMODE_CONFIG = 0x00,
+typedef enum {  // BNO-055 operation modes
+    BNO055_OPERATION_MODE_CONFIG = 0x00,
     // Sensor Mode
-    BNO055_OPMODE_ACCONLY,
-    BNO055_OPMODE_MAGONLY,
-    BNO055_OPMODE_GYRONLY,
-    BNO055_OPMODE_ACCMAG,
-    BNO055_OPMODE_ACCGYRO,
-    BNO055_OPMODE_MAGGYRO,
-    BNO055_OPMODE_AMG,  // 0x07
-                                // Fusion Mode
-    BNO055_OPMODE_IMU,
-    BNO055_OPMODE_COMPASS,
-    BNO055_OPMODE_M4G,
-    BNO055_OPMODE_NDOF_FMC_OFF,
-    BNO055_OPMODE_NDOF  // 0x0C
-};
+    BNO055_OPERATION_MODE_ACCONLY,
+    BNO055_OPERATION_MODE_MAGONLY,
+    BNO055_OPERATION_MODE_GYRONLY,
+    BNO055_OPERATION_MODE_ACCMAG,
+    BNO055_OPERATION_MODE_ACCGYRO,
+    BNO055_OPERATION_MODE_MAGGYRO,
+    BNO055_OPERATION_MODE_AMG,  // 0x07
+    // Fusion Mode
+    BNO055_OPERATION_MODE_IMU,
+    BNO055_OPERATION_MODE_COMPASS,
+    BNO055_OPERATION_MODE_M4G,
+    BNO055_OPERATION_MODE_NDOF_FMC_OFF,
+    BNO055_OPERATION_MODE_NDOF  // 0x0C
+} bno055_opmode_t;
 
+typedef struct { //For POST while starting up the sensor 
+    uint8_t mcuState;
+    uint8_t gyrState;
+    uint8_t magState;
+    uint8_t accState;
+} bno055_self_test_result_t;
+
+typedef struct { //For calibration 
+    uint8_t sys;
+    uint8_t gyro;
+    uint8_t mag;
+    uint8_t accel;
+} bno055_calibration_state_t;
+
+//Calibration Profile----------------------
+typedef struct {
+    int16_t x;
+    int16_t y;
+    int16_t z;
+} bno055_vector_xyz_int16_t;
+
+typedef struct {
+    bno055_vector_xyz_int16_t gyro;
+    bno055_vector_xyz_int16_t mag;
+    bno055_vector_xyz_int16_t accel;
+} bno055_calibration_offset_t;
+
+typedef struct {
+    uint16_t mag;
+    uint16_t accel;
+} bno055_calibration_radius_t;
+
+typedef struct {
+    bno055_calibration_offset_t offset;
+    bno055_calibration_radius_t radius;
+} bno055_calibration_data_t;
+//----------------------------------------
+
+typedef struct {
+    double w;
+    double x;
+    double y;
+    double z;
+} bno055_vector_t;
+
+typedef struct {
+    uint8_t x;
+    uint8_t x_sign;
+    uint8_t y;
+    uint8_t y_sign;
+    uint8_t z;
+    uint8_t z_sign;
+} bno055_axis_map_t;
+
+typedef enum {
+    BNO055_VECTOR_ACCELEROMETER = 0x08,  // Default: m/s²
+    BNO055_VECTOR_MAGNETOMETER = 0x0E,   // Default: uT
+    BNO055_VECTOR_GYROSCOPE = 0x14,      // Default: rad/s
+    BNO055_VECTOR_EULER = 0x1A,          // Default: degrees
+    BNO055_VECTOR_QUATERNION = 0x20,     // No units
+    BNO055_VECTOR_LINEARACCEL = 0x28,    // Default: m/s²
+    BNO055_VECTOR_GRAVITY = 0x2E         // Default: m/s²
+} bno055_vector_type_t;
+
+I2C_HandleTypeDef *_bno055_i2c_port;
+
+void bno055_writeData(uint8_t reg, uint8_t data);
+void bno055_readData(uint8_t reg, uint8_t *data, uint8_t len);
+void bno055_delay(int time);
 
 void bno055_reset();
+bno055_opmode_t bno055_getOperationMode();
+void bno055_setOperationMode(bno055_opmode_t mode);
+void bno055_setOperationModeConfig();
+void bno055_setOperationModeNDOF();
+void bno055_enableExternalCrystal();
+void bno055_disableExternalCrystal();
+void bno055_setup();
+
+int8_t bno055_getTemp();
+
+uint8_t bno055_getBootloaderRevision();
+uint8_t bno055_getSystemStatus();
+uint8_t bno055_getSystemError();
+int16_t bno055_getSWRevision();
+
+bno055_self_test_result_t bno055_getSelfTestResult();
+bno055_calibration_state_t bno055_getCalibrationState();
+bno055_calibration_data_t bno055_getCalibrationData();
+void bno055_setCalibrationData(bno055_calibration_data_t calData);
+bno055_vector_t bno055_getVectorAccelerometer();
+bno055_vector_t bno055_getVectorMagnetometer();
+bno055_vector_t bno055_getVectorGyroscope();
+bno055_vector_t bno055_getVectorEuler();
+bno055_vector_t bno055_getVectorLinearAccel();
+bno055_vector_t bno055_getVectorGravity();
+bno055_vector_t bno055_getVectorQuaternion();
+void bno055_setAxisMap(bno055_axis_map_t axis);
 
 #endif
