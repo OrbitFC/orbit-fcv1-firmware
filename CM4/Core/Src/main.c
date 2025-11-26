@@ -20,9 +20,11 @@
 #include "main.h"
 #include "cmsis_os.h"
 #include "adc.h"
+#include "crc.h"
 #include "fdcan.h"
 #include "i2c.h"
 #include "usart.h"
+#include "rng.h"
 #include "rtc.h"
 #include "spi.h"
 #include "gpio.h"
@@ -123,6 +125,8 @@ int main(void)
   MX_I2C3_Init();
   MX_I2C4_Init();
   MX_UART7_Init();
+  MX_CRC_Init();
+  MX_RNG_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */

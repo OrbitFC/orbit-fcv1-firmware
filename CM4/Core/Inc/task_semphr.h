@@ -6,4 +6,7 @@
 
 extern SemaphoreHandle_t spiHwSemphr;
 extern SemaphoreHandle_t sensorI2cSemphr;
+
+extern SemaphoreHandle_t crcMutex;
+extern SemaphoreHandle_t rngMutex;
 #endif

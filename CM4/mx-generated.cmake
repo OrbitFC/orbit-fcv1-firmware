@@ -26,10 +26,12 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     ./Core/Src/main.c
     ./Core/Src/gpio.c
     ./Core/Src/adc.c
+    ./Core/Src/crc.c
     ./Core/Src/fdcan.c
     ./Core/Src/freertos.c
     ./Core/Src/i2c.c
     ./Core/Src/usart.c
+    ./Core/Src/rng.c
     ./Core/Src/rtc.c
     ./Core/Src/spi.c
     ./Core/Src/stm32h7xx_it.c
@@ -55,9 +57,13 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c
     ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc.c
     ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_adc_ex.c
+    ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_crc.c
+    ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_crc_ex.c
     ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c
     ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c
     ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c
+    ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rng.c
+    ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rng_ex.c
     ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rtc.c
     ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rtc_ex.c
     ../Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.c
