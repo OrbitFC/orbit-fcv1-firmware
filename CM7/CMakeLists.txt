@@ -42,6 +42,7 @@ add_executable(${CMAKE_PROJECT_NAME})
 # Include mx-generated 
 include("mx-generated.cmake")
 
+include("../Common/ccontrol.cmake")
 # Enable CMake support for ASM and C languages
 enable_language(C ASM)
 

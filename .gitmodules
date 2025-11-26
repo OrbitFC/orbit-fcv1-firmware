@@ -1,0 +1,3 @@
+[submodule "Common/CControl"]
+	path = Common/CControl
+	url = https://github.com/DanielMartensson/CControl
